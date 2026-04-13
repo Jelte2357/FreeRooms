@@ -1,0 +1,29 @@
+{
+    "all_rooms": [
+        "A 207",
+        "CZ 113",
+        "WZ 206"
+    ],
+    "replacements": {
+        "A 207": "AZ 207",
+        "C 186 Ruth First": "CZ 186",
+        "Cube 1a": "Cube 1",
+        "WZ 103-C": "WZ 103"
+    },
+    "remove_list": [
+        "E 219 Cult.tuin",
+        "On Demand",
+        "Online",
+        "See note"
+    ],
+    "timeslots": [
+        {
+            "start": "08:45",
+            "end": "10:30"
+        },
+        {
+            "start": "10:45",
+            "end": "12:30"
+        }
+    ]
+}
