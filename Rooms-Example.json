@@ -1,20 +1,34 @@
 {
+    "links": {
+        "rooms": "https://cloud.timeedit.net/...some_ics1.ics",
+        "students": "https://cloud.timeedit.net/...some_ics2.ics"
+    },
+    "link_replacements": {
+        "students": "http://127.0.0.1:8000/Students.ics",
+        "rooms": "http://127.0.0.1:8000/Rooms.ics"
+    },
+    "timezone": "Europe/Amsterdam",
     "all_rooms": [
+        "",
         "A 207",
-        "CZ 113",
-        "WZ 206"
+        "AZ 8",
+        "C 186 Ruth First",
+        "C 24 Aula",
+        "Cube 1a",
+        "Cube 1b",
+        "Cube 242-H",
+        "E 219 Cult.tuin"
     ],
     "replacements": {
         "A 207": "AZ 207",
         "C 186 Ruth First": "CZ 186",
         "Cube 1a": "Cube 1",
-        "WZ 103-C": "WZ 103"
+        "Cube 1b": "Cube 1",
+        "Cube 242-H": "Cube 242"
     },
     "remove_list": [
-        "E 219 Cult.tuin",
-        "On Demand",
-        "Online",
-        "See note"
+        "",
+        "E 219 Cult.tuin"
     ],
     "timeslots": [
         {
