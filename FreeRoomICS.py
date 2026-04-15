@@ -10,7 +10,7 @@ from rich.pretty import pprint
 def bold_capital(text: str) -> str:
     return f"<b>{text.capitalize()}</b>"
 
-def cal_find_freerooms(json_filename: str, use_replacements: bool = False) -> tuple[dict[date_type, dict[str, dict[str, list[str]]]], list[dict[str, str]]]:
+def cal_find_freerooms(json_filename: str, use_replacements: bool = False) -> tuple[dict[date_type, dict[str, dict[str, list[str]]]], list[dict[str, str]], ZoneInfo]:
     all_rooms, replacements, remove_list, timeslots, links, link_replacements, timezone = Free2Room.get_room_json_data(json_filename)
     if use_replacements:
         links = link_replacements
@@ -33,9 +33,9 @@ def cal_find_freerooms(json_filename: str, use_replacements: bool = False) -> tu
     free_rooms_dict = Free2Room.freerooms_operator(all_free_rooms)
     free_rooms_dict = Free2Room.sort_freerooms(free_rooms_dict)
     
-    return free_rooms_dict, timeslots
+    return free_rooms_dict, timeslots, timezone
 
-def freerooms_to_ics(free_rooms_dict: dict[date_type, dict[str, dict[str, list[str]]]], timeslots: list[dict[str, str]]) -> Calendar:
+def freerooms_to_ics(free_rooms_dict: dict[date_type, dict[str, dict[str, list[str]]]], timeslots: list[dict[str, str]], timezone: ZoneInfo) -> Calendar:
     cal = Calendar()
     cal.add('prodid', '-//Free Rooms//Free Rooms Calendar//EN')
     cal.add('version', '2.0')
@@ -46,8 +46,8 @@ def freerooms_to_ics(free_rooms_dict: dict[date_type, dict[str, dict[str, list[s
         for timeslot in timeslots:
             event = Event()
             event.add('summary', f"Free Rooms at {timeslot['start']}")
-            event.add('dtstart', dt.combine(date, dt.strptime(timeslot['start'], "%H:%M").time()))
-            event.add('dtend', dt.combine(date, dt.strptime(timeslot['end'], "%H:%M").time()))
+            event.add('dtstart', Free2Room.to_timezone(dt.combine(date, dt.strptime(timeslot['start'], "%H:%M").time()), ZoneInfo("UTC"), from_timezone=timezone))
+            event.add('dtend', Free2Room.to_timezone(dt.combine(date, dt.strptime(timeslot['end'], "%H:%M").time()), ZoneInfo("UTC"), from_timezone=timezone))
             
             free_rooms = times.get(timeslot['start'], {})
             description = ""

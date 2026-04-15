@@ -39,14 +39,15 @@ def alert_via_HA(title: str, message: str, url: str = "https://home-assistant.je
 def update_calendar():
     global cal, last_update
 
-    free_rooms_dict, timeslots = FreeRoomICS.cal_find_freerooms(
+    free_rooms_dict, timeslots, timezone = FreeRoomICS.cal_find_freerooms(
         JSON_FILENAME,
         False
     )
 
     cal = FreeRoomICS.freerooms_to_ics(
         free_rooms_dict,
-        timeslots
+        timeslots,
+        timezone
     )
 
     last_update = datetime.now()

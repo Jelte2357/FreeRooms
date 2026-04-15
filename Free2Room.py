@@ -29,11 +29,11 @@ def get_room_json_data(json_filename: str = "Rooms.json") -> tuple[set, dict, se
     
     return all_rooms, replacements, remove_list, timeslots, links, link_replacements, timezone
 
-def to_timezone(naive_dt: dt, timezone: ZoneInfo) -> dt:
+def to_timezone(naive_dt: dt, to_timezone: ZoneInfo, from_timezone: ZoneInfo = ZoneInfo("UTC")) -> dt:
     if naive_dt.tzinfo is None:
-        naive_dt = naive_dt.replace(tzinfo=ZoneInfo("UTC"))
+        naive_dt = naive_dt.replace(tzinfo=from_timezone)
     
-    return naive_dt.astimezone(timezone)
+    return naive_dt.astimezone(to_timezone)
 
 def parse_time(time_str: str):
     return dt.strptime(time_str, "%H:%M").time()
