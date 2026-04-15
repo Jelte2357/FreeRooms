@@ -38,7 +38,7 @@ def to_timezone(naive_dt: dt, timezone: ZoneInfo) -> dt:
 def parse_time(time_str: str):
     return dt.strptime(time_str, "%H:%M").time()
 
-def cal_find_rooms(cal: Component, timezone: ZoneInfo, timeslots: list[dict[str, str]], replacements: dict[str, str]) -> dict[date_type, dict[str, set]]:
+def cal_find_rooms(cal: Component, timezone: ZoneInfo, timeslots: list[dict[str, str]], replacements: dict[str, str]) -> dict[date_type, dict[str, set[str]]]:
     dates = {}
 
     for component in cal.walk():
@@ -74,7 +74,7 @@ def cal_find_rooms(cal: Component, timezone: ZoneInfo, timeslots: list[dict[str,
 def sort_rooms(room):
     return room.split()[0], int(room.split()[1]) if len(room.split()) > 1 and room.split()[1].isdigit() else float('inf')
 
-def find_freerooms_from_rooms(dates: dict[date_type, dict[str, set]], all_rooms: set, remove_list: set) -> dict[date_type, dict[str, set]]:
+def find_freerooms_from_rooms(dates: dict[date_type, dict[str, set[str]]], all_rooms: set[str], remove_list: set[str]) -> dict[date_type, dict[str, set[str]]]:
     for date, times in dates.items():
         for time_slot, occupied_rooms in times.items():
             free_rooms = all_rooms - occupied_rooms
@@ -82,7 +82,7 @@ def find_freerooms_from_rooms(dates: dict[date_type, dict[str, set]], all_rooms:
             dates[date][time_slot] = set(sorted(free_rooms, key=sort_rooms))
     return dates
 
-def freerooms_operator(room_dicts: dict[str, dict[date_type, dict[str, set]]]) -> dict[date_type, dict[str, dict[str, set]]]:
+def freerooms_operator(room_dicts: dict[str, dict[date_type, dict[str, set[str]]]]) -> dict[date_type, dict[str, dict[str, set[str]]]]:
     """For each date and timeslot, find what is uniquely free per calendar and what the overlap is."""
     """Output should be like:
     {
@@ -118,7 +118,7 @@ def freerooms_operator(room_dicts: dict[str, dict[date_type, dict[str, set]]]) -
                     output[date][time_slot][cal_name] -= other_free_rooms
     return output
 
-def sort_freerooms(free_rooms_dict: dict[date_type, dict[str, dict[str, set]]]) -> dict[date_type, dict[str, dict[str, list]]]:
+def sort_freerooms(free_rooms_dict: dict[date_type, dict[str, dict[str, set[str]]]]) -> dict[date_type, dict[str, dict[str, list[str]]]]:
     sorted_dict = {}
     for date, times in free_rooms_dict.items():
         sorted_dict[date] = {}
